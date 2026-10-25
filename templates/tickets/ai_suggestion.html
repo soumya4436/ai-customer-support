@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Reply Suggestion</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .notice {
+            background: #d1f4fc;
+            border: 1px solid #9eeaf9;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            box-sizing: border-box;
+            padding: 15px;
+            font: inherit;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        button, .back-link {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 12px 8px 12px 0;
+            border: none;
+            border-radius: 6px;
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-link {
+            background: #6c757d;
+        }
+
+        .warning {
+            color: #555;
+        }
+
+        .error {
+            color: #b00020;
+            background: #ffe5e5;
+            padding: 12px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>AI Support Assistant</h1>
+
+    <h2>{{ ticket.subject }}</h2>
+
+    <p>
+        Ticket #{{ ticket.id }} |
+        {{ ticket.get_category_display }}
+    </p>
+
+    <div class="notice">
+        AI-generated suggestion — review and edit before sending.
+    </div>
+
+    {% if error %}
+
+        <p class="error">{{ error }}</p>
+
+    {% else %}
+
+        <form method="post"
+              action="{% url 'tickets:send_ai_reply' ticket.id %}">
+
+            {% csrf_token %}
+
+            <label for="body">
+                <strong>Edit your reply:</strong>
+            </label>
+
+            <textarea
+                id="body"
+                name="body"
+                required
+                maxlength="10000"
+            >{{ suggested_reply }}</textarea>
+
+            <p class="warning">
+                Review the reply carefully. It will be saved to the
+                conversation only when you click Send Reply.
+            </p>
+
+            <button type="submit">
+                Send Reply
+            </button>
+
+        </form>
+
+    {% endif %}
+
+    <a class="back-link"
+       href="{% url 'tickets:ticket_detail' ticket.id %}">
+        Back to conversation
+    </a>
+
+</body>
+</html>

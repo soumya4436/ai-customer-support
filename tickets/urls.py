@@ -11,4 +11,14 @@ urlpatterns = [
         views.ticket_detail,
         name="ticket_detail",
     ),
+    path(
+    "<int:ticket_id>/ai-suggestion/",
+    views.suggest_ai_reply,
+    name="suggest_ai_reply",
+    ),
+    path(
+    "tickets/<int:ticket_id>/send-ai-reply/",
+    views.send_ai_reply,
+    name="send_ai_reply",
+    ),
 ]

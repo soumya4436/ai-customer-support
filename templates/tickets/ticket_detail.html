@@ -47,6 +47,23 @@
         </div>
     </div>
 
+<div class="mb-4">
+    <form
+        method="post"
+        action="{% url 'tickets:suggest_ai_reply' ticket.id %}"
+    >
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-primary">
+            Generate AI Reply Suggestion
+        </button>
+    </form>
+
+    <small class="text-muted d-block mt-2">
+        AI creates a draft for review. Nothing is sent automatically.
+    </small>
+</div>
+
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-dark text-white">
             <h5 class="mb-0">Conversation</h5>
@@ -78,7 +95,7 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success">
+            <div class="alert alert-{{message.tags}}" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
